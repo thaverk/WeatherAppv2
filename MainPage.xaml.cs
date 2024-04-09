@@ -12,6 +12,7 @@ namespace WeatherApp
 
 
 
+        private IDispatcherTimer _timer;
         
         
         
@@ -56,6 +57,22 @@ namespace WeatherApp
             _weatherData=new WeatherData();
             GetLatestWeather();
             BindingContext = this;
+            _timer=Application.Current.Dispatcher.CreateTimer();
+            _timer.Interval=TimeSpan.FromSeconds(30);
+            _timer.Tick += Timertick; 
+
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            _timer.Start();
+        }
+
+        private void Timertick(object? sender, EventArgs e)
+        {
+            GetLatestWeather();
+            
         }
 
         public ICommand RefreshCommand => new Command(GetLatestWeather);

@@ -5,15 +5,13 @@
              xmlns:super="clr-namespace:WeatherApp.Models"
              xmlns:skia="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
              x:Class="WeatherApp.MainPage" x:DataType="local:MainPage"  >
-   
 
 
-    <RefreshView IsRefreshing="True"
-             Command="{Binding RefreshCommand}"
-                 IsVisible="true" BackgroundColor="Transparent" RefreshColor="Transparent" IsEnabled="True">
-        <ScrollView>
-           
-            <Grid VerticalOptions="FillAndExpand" >
+
+
+    <ScrollView>
+
+        <Grid VerticalOptions="FillAndExpand" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -221,6 +219,5 @@
             </StackLayout>
         </Grid>
     </ScrollView>
-    </RefreshView>
-        
+
 </ContentPage>
