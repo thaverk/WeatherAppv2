@@ -18,7 +18,7 @@ namespace WeatherApp.Models
             {
                 _isCheckingLocation = true;
 
-                GeolocationRequest request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10));
+                GeolocationRequest request = new GeolocationRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(10));
 
                 _cancelTokenSource = new CancellationTokenSource();
 

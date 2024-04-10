@@ -41,6 +41,8 @@
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiIcon Include="Resources\Images\weathericon.svg" />
+		<MauiSplashScreen Include="Resources\Images\weathersplash.svg" Color="#A4DBE8" />
 
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
@@ -57,9 +59,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiImage Remove="Resources\Images\weathericon.svg" />
+	  <MauiImage Remove="Resources\Images\weathersplash.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\Images\backdrop.jpg" />
+	  <None Remove="Resources\Images\backdropv.jpg" />
+	  <None Remove="Resources\Images\image.png" />
+	  <None Remove="Resources\Images\sunrise.png" />
+	  <None Remove="Resources\Images\sunset.png" />
 	  <None Remove="Resources\Images\weather.gif" />
+	  <None Remove="Resources\Images\weathericon.svg" />
+	  <None Remove="Resources\Images\weathersplash.svg" />
 	  <None Remove="Resources\Raw\cloudiness.json" />
 	  <None Remove="Resources\Raw\Humidity.json" />
+	  <None Remove="Resources\Raw\loading.json" />
 	  <None Remove="Resources\Raw\pressure.json" />
 	  <None Remove="Resources\Raw\wind.json" />
 	</ItemGroup>

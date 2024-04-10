@@ -4,76 +4,86 @@
               xmlns:local="clr-namespace:WeatherApp"
              xmlns:super="clr-namespace:WeatherApp.Models"
              xmlns:skia="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
-             x:Class="WeatherApp.MainPage" x:DataType="local:MainPage"  >
+             x:Class="WeatherApp.MainPage" x:DataType="local:MainPage" BackgroundImageSource="backdropv.jpg" >
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <super:ConvertToKilometers x:Key="WindspeedCOnverter" /> 
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
 
+    
+
+    <RefreshView Command="{Binding RefreshCommand}">
 
 
-    <ScrollView>
+        <ScrollView>
+            <Grid VerticalOptions="FillAndExpand" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
 
-        <Grid VerticalOptions="FillAndExpand" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+                </Grid.RowDefinitions>
+                
 
-
-            <StackLayout
+                <StackLayout
             Margin="0,20"
             HorizontalOptions="Center"
             Orientation="Vertical"
             Spacing="20"
             VerticalOptions="Start">
-                <StackLayout Orientation="Horizontal">
-                    <Label
+                    <StackLayout Orientation="Horizontal">
+                        <Label
                      
                     FontSize="16"
                     Text="Cape Town"
-                    TextColor="Black"
+                    TextColor="White"
                     VerticalOptions="Center" />
-                    <Label
+                        <Label
                     FontSize="16"
                     Text="{Binding Country, StringFormat=' , {0}'}"
-                    TextColor="Black"
+                    TextColor="White"
                     VerticalOptions="Center" />
+                    </StackLayout>
                 </StackLayout>
-            </StackLayout>
 
-            <StackLayout
+                <StackLayout
             Margin="0,35"
             HorizontalOptions="Center"
             Orientation="Vertical"
             VerticalOptions="Center">
-                <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
-                    <Label
+                    <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+                        <Label
                     FontAttributes="Bold"
                     FontSize="70"
                     Text="{Binding Temp}"
-                    TextColor="Black"
+                    TextColor="White"
                     VerticalOptions="Center" />
-                    <Label
+                        <Label
                     FontSize="34"
                     Text="°C"
-                    TextColor="Black"
+                    TextColor="White"
                     VerticalOptions="Center" />
-                </StackLayout>
-                <Label
+                    </StackLayout>
+                    <Label
                 FontSize="16"
                 HorizontalOptions="Center"
                 Text="{Binding Description}"
-                TextColor="Black" />
-                <Label
+                TextColor="White" />
+                    <Label
                 FontSize="12"
                 HorizontalOptions="Center"
                 Text="{Binding Time}"
-                TextColor="Black" />
-            </StackLayout>
+                TextColor="White" />
+                </StackLayout>
 
-            <Frame
+                <Frame
             Grid.Row="1"
             Margin="20,-10,20,0"
             Padding="0"
@@ -82,24 +92,24 @@
             HeightRequest="140"
             VerticalOptions="Start">
 
-                <Grid
+                    <Grid
                 Margin="0,35,0,0"
                 HorizontalOptions="FillAndExpand"
                 VerticalOptions="CenterAndExpand">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
-                    <StackLayout
+                        <StackLayout
                     HorizontalOptions="CenterAndExpand"
                     Orientation="Vertical"
                     >
-                        <skia:SKLottieView Source="Humidity.json" RepeatMode="Reverse" RepeatCount="-1" HeightRequest="150" Margin="0,-50,0,0"/>
-                        <StackLayout HorizontalOptions="CenterAndExpand" Spacing="7">
-                            <Label
+                            <skia:SKLottieView Source="Humidity.json" RepeatMode="Reverse" RepeatCount="-1" HeightRequest="150" Margin="0,-50,0,0"/>
+                            <StackLayout HorizontalOptions="CenterAndExpand" Spacing="7">
+                                <Label
                             FontAttributes="Bold"
                             FontSize="14"
                             HorizontalOptions="Center"
@@ -107,117 +117,147 @@
                             TextColor="Black" 
                              Margin="0,-50,0,0"
                              />
-                            <Label
+                                <Label
                             FontSize="11"
                             HorizontalOptions="Center"
                             Text="Humidity"
                             TextColor="#7D7D7D" />
+                            </StackLayout>
                         </StackLayout>
-                    </StackLayout>
 
-                    <StackLayout
+                        <StackLayout
                     Grid.Column="1"
                     HorizontalOptions="CenterAndExpand"
                     Orientation="Vertical"
                    >
-                        <skia:SKLottieView Source="wind.json" RepeatCount="-1" RepeatMode="Reverse" HeightRequest="150" Margin="0,-50,0,0" />
-                        <StackLayout HorizontalOptions="CenterAndExpand" Spacing="7">
-                            <Label
+                            <skia:SKLottieView Source="wind.json" RepeatCount="-1" RepeatMode="Reverse" HeightRequest="150" Margin="0,-50,0,0" />
+                            <StackLayout HorizontalOptions="CenterAndExpand" Spacing="7">
+                                <Label
                             FontAttributes="Bold"
                             FontSize="14"
                             HorizontalOptions="Center"
-                            Text="{Binding Wind}"
+                            Text="{Binding Wind,Converter={StaticResource WindspeedCOnverter}}"
                             TextColor="Black" 
                                 Margin="0,-50,0,0"/>
-                            <Label
+                                <Label
                             FontSize="11"
                             HorizontalOptions="Center"
                             Text="Wind"
                             TextColor="#7D7D7D" />
+                            </StackLayout>
                         </StackLayout>
-                    </StackLayout>
 
-                    <StackLayout
+                        <StackLayout
                     Grid.Column="2"
                     HorizontalOptions="CenterAndExpand"
                     Orientation="Vertical"
                     >
-                        <skia:SKLottieView Source="pressure.json" RepeatCount="-1" RepeatMode="Reverse" HeightRequest="150" Margin="0,-50,0,0"/>
-                        <StackLayout HorizontalOptions="CenterAndExpand" Spacing="7">
-                            <Label
+                            <skia:SKLottieView Source="pressure.json" RepeatCount="-1" RepeatMode="Reverse" HeightRequest="150" Margin="0,-50,0,0"/>
+                            <StackLayout HorizontalOptions="CenterAndExpand" Spacing="7">
+                                <Label
                             FontAttributes="Bold"
                             FontSize="14"
                             HorizontalOptions="Center"
                             Text="{Binding Pressure}"
                             TextColor="Black" 
                                 Margin="0,-50,0,0"/>
-                            <Label
+                                <Label
                             FontSize="11"
                             HorizontalOptions="Center"
                             Text="Pressure"
                             TextColor="#7D7D7D" />
+                            </StackLayout>
                         </StackLayout>
-                    </StackLayout>
 
-                    <StackLayout
+                        <StackLayout
                     Grid.Column="3"
                     HorizontalOptions="CenterAndExpand"
                     Orientation="Vertical"
                     >
-                        <skia:SKLottieView Source="cloudiness.json" RepeatCount="-1" RepeatMode="Reverse" HeightRequest="150"  Margin="0,-50,0,0"/>
-                        <StackLayout HorizontalOptions="CenterAndExpand" Spacing="7">
-                            <Label
+                            <skia:SKLottieView Source="cloudiness.json" RepeatCount="-1" RepeatMode="Reverse" HeightRequest="150"  Margin="0,-50,0,0"/>
+                            <StackLayout HorizontalOptions="CenterAndExpand" Spacing="7">
+                                <Label
                             FontAttributes="Bold"
                             FontSize="14"
                             HorizontalOptions="Center"
                             Text="{Binding Clouds}"
                             TextColor="Black" 
                                 Margin="0,-50,0,0"/>
-                            <Label
+                                <Label
                             FontSize="11"
                             HorizontalOptions="Center"
                             Text="Cloudiness"
                             TextColor="#7D7D7D" />
+                            </StackLayout>
                         </StackLayout>
-                    </StackLayout>
 
-                </Grid>
-            </Frame>
+                    </Grid>
+                </Frame>
+
+                <Frame 
+             Grid.Row="6"   
+             Margin="20,0,20,0"
+             Padding="0"
+             CornerRadius="10"
+             HasShadow="True"
+             HeightRequest="140"
+            VerticalOptions="Start">
+                    
+                        
+                        <Grid Margin="0,35,0,0"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="CenterAndExpand">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackLayout Spacing="10">
+                                <Image Source="sunrise.png"  Aspect="AspectFit" HeightRequest="50" Margin="0,0,0,0"/>
+                                <StackLayout HorizontalOptions="CenterAndExpand" Spacing="7">
+                                    <Label
+                            FontAttributes="Bold"
+                            FontSize="12"
+                            HorizontalOptions="Center"
+                            Text="{Binding sunrise}"
+                            TextColor="Black" 
+                                Margin="0,-10,0,0"/>
+                                    <Label
+                            FontSize="11"
+                            HorizontalOptions="Center"
+                            Text="Sunrise"
+                            TextColor="#7D7D7D" />
+
+                                </StackLayout>
+                            </StackLayout>
+
+                            <StackLayout Grid.Column="1" Spacing="10">
+
+                                <Image Source="sunset.png"  Aspect="AspectFit" HeightRequest="50" Margin="0,0,0,0"/>
+                                <StackLayout HorizontalOptions="CenterAndExpand" Spacing="7">
+                                    <Label
+                             FontAttributes="Bold"
+                             FontSize="12"
+                             HorizontalOptions="Center"
+                             Text="{Binding Sunset}"
+                             TextColor="Black" 
+                                 Margin="0,-10,0,0"/>
+                                    <Label
+                             FontSize="11"
+                             HorizontalOptions="Center"
+                             Text="Sunset"
+                             TextColor="#7D7D7D" />
+
+                                </StackLayout>
+                            </StackLayout>
+
+                        </Grid>
+                    
+                </Frame>
+                <ActivityIndicator x:Name="activityindicator" IsRunning="False" IsVisible="False" Margin="0,-140,320,0" Color="LightBlue"/>
+
+            </Grid>
 
 
-            <StackLayout
-            Grid.Row="2"
-            Margin="20,40,0,60"
-            Orientation="Vertical"
-            Spacing="20">
-                <StackLayout Orientation="Horizontal" Spacing="40">
-                    <Label
-                    FontAttributes="Bold"
-                    FontSize="Small"
-                    Text="Time of Sunrise"
-                    TextColor="Black"
-                    VerticalOptions="Center" />
-                    <Label
-                    FontSize="15"
-                    Text="{Binding sunrise}"
-                    TextColor="Black"
-                    VerticalOptions="Center" />
-                </StackLayout>
-                <StackLayout Orientation="Horizontal" Spacing="40">
-                    <Label
-                    FontAttributes="Bold"
-                    FontSize="Small"
-                    Text="Time of Sunset"
-                    TextColor="Black"
-                    VerticalOptions="Center" />
-                    <Label
-                    FontSize="15"
-                    Text="{Binding Sunset}"
-                    TextColor="Black"
-                    VerticalOptions="Center" />
-                </StackLayout>
-            </StackLayout>
-        </Grid>
-    </ScrollView>
-
+        </ScrollView>
+    </RefreshView>
 </ContentPage>
