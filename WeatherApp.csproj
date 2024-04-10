@@ -67,6 +67,8 @@
 	  <None Remove="Resources\Images\backdrop.jpg" />
 	  <None Remove="Resources\Images\backdropv.jpg" />
 	  <None Remove="Resources\Images\image.png" />
+	  <None Remove="Resources\Images\maximum.png" />
+	  <None Remove="Resources\Images\minimum.png" />
 	  <None Remove="Resources\Images\sunrise.png" />
 	  <None Remove="Resources\Images\sunset.png" />
 	  <None Remove="Resources\Images\weather.gif" />

@@ -50,6 +50,13 @@ namespace WeatherApp
 
         private string _description;
         public string Description { get { return _description; } set { _description = value; OnPropertyChanged(); } }
+
+        private double _tempmin;
+        public double Tempmin { get { return _tempmin; } set { _tempmin = value; OnPropertyChanged(); } }
+
+        private double _tempmax;
+        public double Tempmax { get { return _tempmax; } set { _tempmax = value; OnPropertyChanged(); } }
+        
         private ConvertToKilometers _convertToKilometers;
         public MainPage()
         {
@@ -59,8 +66,8 @@ namespace WeatherApp
             _convertToKilometers = new ConvertToKilometers();
             _weatherData = new WeatherData();
             GetLatestWeather();
-
-
+            _convertToKilometers=new ConvertToKilometers();
+           ActivityIndicator activityindicator=new ActivityIndicator();
 
             _timer = Application.Current.Dispatcher.CreateTimer();
             _timer.Interval = TimeSpan.FromSeconds(5);
@@ -85,45 +92,46 @@ namespace WeatherApp
         }
 
         public ICommand RefreshCommand => new Command(GetLatestWeather);
-        
-        public async void  GetLatestWeather()
+
+        public async void GetLatestWeather()
         {
             activityindicator.IsRunning = true;
             activityindicator.IsVisible = true;
             activityindicator.HeightRequest = 30;
             activityindicator.WidthRequest = 30;
-            
 
-                    Location location = await _gpsmodule.GetCurrentLocation();
+
+            Location location = await _gpsmodule.GetCurrentLocation();
             double lat = location.Latitude;
             double lng = location.Longitude;
 
             string appid = "84e1ae5b22423295b04911bcbcb78422";
             string response = await _client.GetStringAsync(new Uri($"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lng}&appid={appid}&units=metric"));
 
-           WeatherData = JsonConvert.DeserializeObject<WeatherData>(response);
+            WeatherData = JsonConvert.DeserializeObject<WeatherData>(response);
 
-            
-                DateTimeOffset dtoffset = DateTimeOffset.FromUnixTimeSeconds(WeatherData.dt);
-                Time = dtoffset.UtcDateTime.ToString();
 
-                 dtoffset = DateTimeOffset.FromUnixTimeSeconds(WeatherData.sys.sunrise);
-                sunrise = dtoffset.UtcDateTime.ToString();
+            DateTimeOffset dtoffset = DateTimeOffset.FromUnixTimeSeconds(WeatherData.dt);
+            Time = dtoffset.UtcDateTime.ToString();
 
-                dtoffset = DateTimeOffset.FromUnixTimeSeconds(WeatherData.sys.sunset);
-                Sunset = dtoffset.UtcDateTime.ToString();
-            
-           Country = WeatherData.sys.country;
+            dtoffset = DateTimeOffset.FromUnixTimeSeconds(WeatherData.sys.sunrise);
+            sunrise = dtoffset.UtcDateTime.ToString();
+
+            dtoffset = DateTimeOffset.FromUnixTimeSeconds(WeatherData.sys.sunset);
+            Sunset = dtoffset.UtcDateTime.ToString();
+
+            Country = WeatherData.sys.country;
             Temp = Math.Round(WeatherData.main.temp);
             Humidity = WeatherData.main.humidity;
             Pressure = WeatherData.main.pressure;
             Wind = WeatherData.wind.speed;
             Clouds = WeatherData.clouds.all;
             Description = WeatherData.weather[0].description.ToUpper();
-            
+            Tempmax = Math.Round(WeatherData.main.temp_max);
+            Tempmin = Math.Round(WeatherData.main.temp_min);
             activityindicator.IsRunning = false;
             activityindicator.IsVisible = false;
-            
+             
         }
     
     
