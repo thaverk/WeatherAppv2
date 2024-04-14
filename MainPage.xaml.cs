@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using WeatherApp.Models;
 using System.Windows.Input;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WeatherApp
 {
@@ -58,6 +57,10 @@ namespace WeatherApp
         public double Tempmax { get { return _tempmax; } set { _tempmax = value; OnPropertyChanged(); } }
         
         private ConvertToKilometers _convertToKilometers;
+
+        public bool IsBusy { get; set; }
+
+
         public MainPage()
         {
             InitializeComponent();
@@ -72,7 +75,6 @@ namespace WeatherApp
             _timer = Application.Current.Dispatcher.CreateTimer();
             _timer.Interval = TimeSpan.FromSeconds(5);
             _timer.Tick += Timertick;
-            _timer.Start();
             BindingContext = this;
         }
 
@@ -80,61 +82,83 @@ namespace WeatherApp
         {
             base.OnAppearing();
             _timer.Start();
-            GetLatestWeather();
         }
 
        
         
-        private void Timertick(object? sender, EventArgs e)
+        private async void Timertick(object? sender, EventArgs e)
         {
-            GetLatestWeather();
+            try
+            {
+                _timer.Stop();
+                await GetLatestWeather();
+            }
+            finally
+            {
+                _timer.Start();
+            }
             
         }
 
-        public ICommand RefreshCommand => new Command(GetLatestWeather);
+        public ICommand RefreshCommand => new Command(Refresh);
 
-        public async void GetLatestWeather()
+        private async void Refresh()
         {
-            activityindicator.IsRunning = true;
-            activityindicator.IsVisible = true;
-            activityindicator.HeightRequest = 30;
-            activityindicator.WidthRequest = 30;
-
-
-            Location location = await _gpsmodule.GetCurrentLocation();
-            double lat = location.Latitude;
-            double lng = location.Longitude;
-
-            string appid = "84e1ae5b22423295b04911bcbcb78422";
-            string response = await _client.GetStringAsync(new Uri($"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lng}&appid={appid}&units=metric"));
-
-            WeatherData = JsonConvert.DeserializeObject<WeatherData>(response);
-
-
-            DateTimeOffset dtoffset = DateTimeOffset.FromUnixTimeSeconds(WeatherData.dt);
-            Time = dtoffset.UtcDateTime.ToString();
-
-            dtoffset = DateTimeOffset.FromUnixTimeSeconds(WeatherData.sys.sunrise);
-            sunrise = dtoffset.UtcDateTime.ToString();
-
-            dtoffset = DateTimeOffset.FromUnixTimeSeconds(WeatherData.sys.sunset);
-            Sunset = dtoffset.UtcDateTime.ToString();
-
-            Country = WeatherData.sys.country;
-            Temp = Math.Round(WeatherData.main.temp);
-            Humidity = WeatherData.main.humidity;
-            Pressure = WeatherData.main.pressure;
-            Wind = WeatherData.wind.speed;
-            Clouds = WeatherData.clouds.all;
-            Description = WeatherData.weather[0].description.ToUpper();
-            Tempmax = Math.Round(WeatherData.main.temp_max);
-            Tempmin = Math.Round(WeatherData.main.temp_min);
-            activityindicator.IsRunning = false;
-            activityindicator.IsVisible = false;
-             
+            await GetLatestWeather();
         }
-    
-    
+
+        public async Task GetLatestWeather()
+        {
+            if (!IsBusy)
+            {
+
+                try
+                {
+                    IsBusy = true;
+
+                    activityindicator.IsRunning = IsBusy;
+                    activityindicator.IsVisible = IsBusy;
+                    activityindicator.HeightRequest = 30;
+                    activityindicator.WidthRequest = 30;
+
+                    Location location = await _gpsmodule.GetCurrentLocation();
+                    double lat = location.Latitude;
+                    double lng = location.Longitude;
+
+                    string appid = "84e1ae5b22423295b04911bcbcb78422";
+                    string response = await _client.GetStringAsync(new Uri($"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lng}&appid={appid}&units=metric"));
+
+                    WeatherData = JsonConvert.DeserializeObject<WeatherData>(response);
+
+
+                    DateTimeOffset dtoffset = DateTimeOffset.FromUnixTimeSeconds(WeatherData.dt);
+                    Time = dtoffset.UtcDateTime.ToString();
+
+                    dtoffset = DateTimeOffset.FromUnixTimeSeconds(WeatherData.sys.sunrise);
+                    sunrise = dtoffset.UtcDateTime.ToString();
+
+                    dtoffset = DateTimeOffset.FromUnixTimeSeconds(WeatherData.sys.sunset);
+                    Sunset = dtoffset.UtcDateTime.ToString();
+
+                    Country = WeatherData.sys.country;
+                    Temp = Math.Round(WeatherData.main.temp);
+                    Humidity = WeatherData.main.humidity;
+                    Pressure = WeatherData.main.pressure;
+                    Wind = WeatherData.wind.speed;
+                    Clouds = WeatherData.clouds.all;
+                    Description = WeatherData.weather[0].description.ToUpper();
+                    Tempmax = Math.Round(WeatherData.main.temp_max);
+                    Tempmin = Math.Round(WeatherData.main.temp_min);
+                }
+                finally
+                {
+                    IsBusy = false;
+                    activityindicator.IsRunning = IsBusy;
+                    activityindicator.IsVisible = IsBusy;
+                }
+            }
+
+        }
         
     
     }
